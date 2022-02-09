@@ -1,0 +1,376 @@
+<div class="container1">
+  <section class="projectsSearch">
+    <nav class="navbar navbar-light">
+      <div class="container-fluid">
+        <div class="projectHead">
+          <a class="navbar-brand projectName">Projects</a>
+        </div>
+        <div class="searchBar">
+          <form class="d-flex">
+            <input
+              class="form-control me-10 searchBox"
+              type="search"
+              placeholder="Search"
+            />
+            <button class="btn searchButton" type="submit">
+              <fa-icon class="search-icon" [icon]="searchIcon"></fa-icon>
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </section>
+  <section>
+    <div class="wrapper">
+      <div class="container">
+        <div class="card" *ngFor="let project of projects; let i = index">
+          <div
+            class="badge status tag"
+            [ngClass]="
+              project.status === 'Active' ? 'tag-active' : 'tag-inactive'
+            "
+          >
+            {{ project.status }}
+          </div>
+          <div class="card-body">
+            <div class="user">
+              <h4 class="projectName">{{ project.projectName }}</h4>
+            </div>
+
+            <div class="user">
+              <img src="{{ project.image }}" alt="" />
+              <div class="user-info">
+                <h5>{{ project.clientName }}</h5>
+              </div>
+            </div>
+            <div class="user">
+              <span class="empIcon"
+                ><fa-icon class="user-icon" [icon]="userIcon"></fa-icon
+              ></span>
+              <div class="employee-info">
+                <h5>{{ project.employeeCount }}</h5>
+              </div>
+            </div>
+            <div class="buttons">
+              <button type="button" class="btn btn1 editButton btn-icon-text">
+                <fa-icon class="btn-icon-prepend" [icon]="viewIcon"></fa-icon
+                ><span class="btnText">View</span>
+              </button>
+              <button
+                type="button"
+                class="btn editButton btn-icon-text"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                <fa-icon class="btn-icon-prepend" [icon]="taskIcon"></fa-icon>
+                <span class="btnText">Tasks</span>
+              </button>
+              <div
+                class="modal fade come-from-modal right"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Project Tasks
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">...</div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button type="button fake" class="btn btn-primary">
+                          Save changes
+                        </button>
+                      </div> -->
+                    <div class="tasks">
+                      <div class="taskHeader">
+                        <span class="projectTask">Project Tasks</span>
+                        <button
+                          type="button"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                      <div class="taskBody">
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Task name</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                              Date:22-02-2022
+                            </h6>
+
+                            <p class="card-text">
+                              Some quick example text to build on the card title
+                              and make up the bulk of the card's content.Some
+                              quick example text to build on the card title and
+                              make up the bulk of the card's content.Some quick
+                              example text to build on the card title and make
+                              up the bulk of the card's content.Some quick
+                              example text to build on the card title and make
+                              up the bulk of the card's content.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title">Task name</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                              Date:22-02-2022
+                            </h6>
+
+                            <p class="card-text">
+                              Some quick example text to build on the card title
+                              and make up the bulk of the card's content.Some
+                              quick example text to build on the card title and
+                              make up the bulk of the card's content.Some quick
+                              example text to build on the card title and make
+                              up the bulk of the card's content.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="card">
+            <div class="badge status tag tag-active">Active</div>
+            <div class="card-body">
+              <div class="user">
+                <h4 class="projectName">Equifax</h4>
+              </div>
+  
+              <div class="user">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                />
+                <div class="user-info">
+                  <h5>Jerome Walton</h5>
+                </div>
+              </div>
+              <div class="user">
+                <span class="empIcon"
+                  ><fa-icon class="user-icon" [icon]="userIcon"></fa-icon
+                ></span>
+                <div class="employee-info">
+                  <h5>44</h5>
+                </div>
+              </div>
+              <div class="buttons">
+                <button type="button" class="btn btn1 editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="editIcon"></fa-icon
+                  ><span class="btnText">Edit</span>
+                </button>
+                <button type="button" class="btn editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="taskIcon"></fa-icon>
+                  <span class="btnText">Tasks</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="badge status tag tag-active">Active</div>
+            <div class="card-body">
+              <div class="user">
+                <h4 class="projectName">Equifax</h4>
+              </div>
+  
+              <div class="user">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                />
+                <div class="user-info">
+                  <h5>Jerome Walton</h5>
+                </div>
+              </div>
+              <div class="user">
+                <span class="empIcon"
+                  ><fa-icon class="user-icon" [icon]="userIcon"></fa-icon
+                ></span>
+                <div class="employee-info">
+                  <h5>44</h5>
+                </div>
+              </div>
+              <div class="buttons">
+                <button type="button" class="btn btn1 editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="editIcon"></fa-icon
+                  ><span class="btnText">Edit</span>
+                </button>
+                <button type="button" class="btn editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="taskIcon"></fa-icon>
+                  <span class="btnText">Tasks</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="badge status tag tag-active">Active</div>
+            <div class="card-body">
+              <div class="user">
+                <h4 class="projectName">Equifax</h4>
+              </div>
+  
+              <div class="user">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                />
+                <div class="user-info">
+                  <h5>Jerome Walton</h5>
+                </div>
+              </div>
+              <div class="user">
+                <span class="empIcon"
+                  ><fa-icon class="user-icon" [icon]="userIcon"></fa-icon
+                ></span>
+                <div class="employee-info">
+                  <h5>44</h5>
+                </div>
+              </div>
+              <div class="buttons">
+                <button type="button" class="btn btn1 editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="editIcon"></fa-icon
+                  ><span class="btnText">Edit</span>
+                </button>
+                <button type="button" class="btn editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="taskIcon"></fa-icon>
+                  <span class="btnText">Tasks</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="badge status tag tag-active">Active</div>
+            <div class="card-body">
+              <div class="user">
+                <h4 class="projectName">Equifax</h4>
+              </div>
+  
+              <div class="user">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                />
+                <div class="user-info">
+                  <h5>Jerome Walton</h5>
+                </div>
+              </div>
+              <div class="user">
+                <span class="empIcon"
+                  ><fa-icon class="user-icon" [icon]="userIcon"></fa-icon
+                ></span>
+                <div class="employee-info">
+                  <h5>44</h5>
+                </div>
+              </div>
+              <div class="buttons">
+                <button type="button" class="btn btn1 editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="editIcon"></fa-icon
+                  ><span class="btnText">Edit</span>
+                </button>
+                <button type="button" class="btn editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="taskIcon"></fa-icon>
+                  <span class="btnText">Tasks</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="badge status tag tag-active">Active</div>
+            <div class="card-body">
+              <div class="user">
+                <h4 class="projectName">Equifax</h4>
+              </div>
+  
+              <div class="user">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                />
+                <div class="user-info">
+                  <h5>Jerome Walton</h5>
+                </div>
+              </div>
+              <div class="user">
+                <span class="empIcon"
+                  ><fa-icon class="user-icon" [icon]="userIcon"></fa-icon
+                ></span>
+                <div class="employee-info">
+                  <h5>44</h5>
+                </div>
+              </div>
+              <div class="buttons">
+                <button type="button" class="btn btn1 editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="editIcon"></fa-icon
+                  ><span class="btnText">Edit</span>
+                </button>
+                <button type="button" class="btn editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="taskIcon"></fa-icon>
+                  <span class="btnText">Tasks</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="badge status tag tag-active">Active</div>
+            <div class="card-body">
+              <div class="user">
+                <h4 class="projectName">Equifax</h4>
+              </div>
+  
+              <div class="user">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                />
+                <div class="user-info">
+                  <h5>Jerome Walton</h5>
+                </div>
+              </div>
+              <div class="user">
+                <span class="empIcon"
+                  ><fa-icon class="user-icon" [icon]="userIcon"></fa-icon
+                ></span>
+                <div class="employee-info">
+                  <h5>44</h5>
+                </div>
+              </div>
+              <div class="buttons">
+                <button type="button" class="btn btn1 editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="editIcon"></fa-icon
+                  ><span class="btnText">Edit</span>
+                </button>
+                <button type="button" class="btn editButton btn-icon-text">
+                  <fa-icon class="btn-icon-prepend" [icon]="taskIcon"></fa-icon>
+                  <span class="btnText">Tasks</span>
+                </button>
+              </div>
+            </div>
+          </div> -->
+      </div>
+    </div>
+  </section>
+</div>
