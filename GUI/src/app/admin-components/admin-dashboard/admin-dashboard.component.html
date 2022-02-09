@@ -1,0 +1,306 @@
+<!-- <nav>
+  <div class="logo">Logo</div>
+  <input type="checkbox" id="click" />
+  <label for="click" class="menu-btn">
+    <fa-icon class="toggleBut" [icon]="navToggle"></fa-icon>
+  </label>
+  <ul>
+    <li><a class="active" href="#">Home</a></li>
+    <li><a href="#">Projects</a></li>
+
+    <li>
+      <a href="#">Manage</a>
+    </li>
+    <li><a href="#">Edit Time sheets</a></li>
+  </ul>
+</nav>
+<div class="content">
+  these are comments
+   <div class="text">Admin Dashboard here</div> 
+   <div><app-projects></app-projects></div>
+</div> -->
+<div class="main-content">
+  <div class="wrapper">
+    <nav>
+      <input type="checkbox" id="show-menu" />
+      <label for="show-menu" class="menu-icon"
+        ><fa-icon class="toggleBut" [icon]="navToggle"></fa-icon
+      ></label>
+      <div class="content">
+        <div class="logo"><a href="#">Logo</a></div>
+        <ul class="links">
+          <li><a href="#">Home</a></li>
+
+          <li>
+            <a href="#" class="desktop-link"
+              >Manage<fa-icon
+                style="padding-left: 5px"
+                class="dropdownIcon"
+                [icon]="dropdownToggle"
+              ></fa-icon
+            ></a>
+            <input type="checkbox" id="show-features" />
+            <label for="show-features"
+              >Manage<fa-icon
+                style="padding-left: 5px"
+                class="dropdownIcon"
+                [icon]="dropdownToggle"
+              ></fa-icon
+            ></label>
+            <ul>
+              <li><a href="#">Clients</a></li>
+              <li><a href="#">Departments</a></li>
+              <li><a href="#">Projects</a></li>
+              <li><a href="#">Users</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Edit Timesheets</a></li>
+        </ul>
+      </div>
+      <div class="user-wrapper">
+        <a href="#" title="view Profile">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+            alt=""
+            width="40px "
+            height="40px"
+          />
+          <div>
+            <h5>Venkat</h5>
+            <small>Admin</small>
+          </div>
+        </a>
+        <div class="logout"><a href="#">Logout</a></div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="pageMain">
+    <div class="cards">
+      <div class="card-single">
+        <div>
+          <h1>{{ adminData.countsData.employeeCount }}</h1>
+          <span>Employees</span>
+        </div>
+        <div>
+          <span><fa-icon [icon]="usersIcon"></fa-icon></span>
+        </div>
+      </div>
+      <div class="card-single">
+        <div>
+          <h1>{{ adminData.countsData.clientCount }}</h1>
+          <span>Clients</span>
+        </div>
+        <div>
+          <span><fa-icon [icon]="clientsIcon"></fa-icon></span>
+        </div>
+      </div>
+      <div class="card-single">
+        <div>
+          <h1>{{ adminData.countsData.departmentCount }}</h1>
+          <span>Departments</span>
+        </div>
+        <div>
+          <span><fa-icon [icon]="deptIcon"></fa-icon></span>
+        </div>
+      </div>
+      <div class="card-single">
+        <div>
+          <h1>{{ adminData.countsData.projectsCount }}</h1>
+          <span>Projects</span>
+        </div>
+        <div>
+          <span><fa-icon [icon]="projectIcon"></fa-icon></span>
+        </div>
+      </div>
+    </div>
+    <div class="recent-grid">
+      <div class="projects">
+        <div class="card">
+          <div class="card-header">
+            <h4>Recent Projects</h4>
+            <button>
+              View all <span><fa-icon [icon]="arrowRightIcon"></fa-icon></span>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="table-responisve">
+              <table width="100%">
+                <thead>
+                  <tr>
+                    <td>#</td>
+                    <td>Project Title</td>
+                    <td>Client Name</td>
+                    <td>No of employees</td>
+                    <td>Deadline</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let projectData of adminData.projectsData;
+                      let i = index
+                    "
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ projectData.projectName }}</td>
+                    <td>{{ projectData.projectClient }}</td>
+                    <td>{{ projectData.empCount }}</td>
+                    <td>{{ projectData.projectDeadline }}</td>
+                  </tr>
+                  <!-- <tr>
+                      <td>1</td>
+                      <td>Equifax</td>
+                      <td>venkat</td>
+                      <td>30</td>
+                      <td>21-02-2022</td>
+                    </tr>
+  
+                    <tr>
+                      <td>1</td>
+                      <td>Equifax</td>
+                      <td>venkat</td>
+                      <td>30</td>
+                      <td>21-02-2022</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Equifax</td>
+                      <td>venkat</td>
+                      <td>30</td>
+                      <td>21-02-2022</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Equifax</td>
+                      <td>venkat</td>
+                      <td>30</td>
+                      <td>21-02-2022</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Equifax</td>
+                      <td>venkat</td>
+                      <td>30</td>
+                      <td>21-02-2022</td>
+                    </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="customers">
+        <div class="card">
+          <div class="card-header">
+            <h4>New Clients</h4>
+            <button>
+              View all <span><fa-icon [icon]="arrowRightIcon"></fa-icon></span>
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="customer">
+              <div class="info">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                  width="40px"
+                  height="40px"
+                />
+                <div>
+                  <h6>Venkat</h6>
+                  <small>Developer</small>
+                </div>
+              </div>
+              <div class="contact">
+                <span><fa-icon [icon]="userCircle"></fa-icon></span>
+                <span><fa-icon [icon]="commentIcon"></fa-icon></span>
+                <span><fa-icon [icon]="phoneIcon"></fa-icon></span>
+              </div>
+            </div>
+
+            <div class="customer">
+              <div class="info">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                  width="40px"
+                  height="40px"
+                />
+                <div>
+                  <h6>Venkat</h6>
+                  <small>Developer</small>
+                </div>
+              </div>
+              <div class="contact">
+                <span><fa-icon [icon]="userCircle"></fa-icon></span>
+                <span><fa-icon [icon]="commentIcon"></fa-icon></span>
+                <span><fa-icon [icon]="phoneIcon"></fa-icon></span>
+              </div>
+            </div>
+            <div class="customer">
+              <div class="info">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                  width="40px"
+                  height="40px"
+                />
+                <div>
+                  <h6>Venkat</h6>
+                  <small>Developer</small>
+                </div>
+              </div>
+              <div class="contact">
+                <span><fa-icon [icon]="userCircle"></fa-icon></span>
+                <span><fa-icon [icon]="commentIcon"></fa-icon></span>
+                <span><fa-icon [icon]="phoneIcon"></fa-icon></span>
+              </div>
+            </div>
+            <div class="customer">
+              <div class="info">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                  width="40px"
+                  height="40px"
+                />
+                <div>
+                  <h6>Venkat</h6>
+                  <small>Developer</small>
+                </div>
+              </div>
+              <div class="contact">
+                <span><fa-icon [icon]="userCircle"></fa-icon></span>
+                <span><fa-icon [icon]="commentIcon"></fa-icon></span>
+                <span><fa-icon [icon]="phoneIcon"></fa-icon></span>
+              </div>
+            </div>
+            <div class="customer">
+              <div class="info">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/48/Outdoors-man-portrait_%28cropped%29.jpg"
+                  alt=""
+                  width="40px"
+                  height="40px"
+                />
+                <div>
+                  <h6>Venkat</h6>
+                  <small>Developer</small>
+                </div>
+              </div>
+              <div class="contact">
+                <span><fa-icon [icon]="userCircle"></fa-icon></span>
+                <span><fa-icon [icon]="commentIcon"></fa-icon></span>
+                <span><fa-icon [icon]="phoneIcon"></fa-icon></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- <div class="other-pages">
+      <app-projects></app-projects>
+    </div> -->
+</div>
