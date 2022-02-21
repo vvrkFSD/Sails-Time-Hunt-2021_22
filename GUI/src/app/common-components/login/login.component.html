@@ -1,1 +1,26 @@
-<p>login works!</p>
+<div class="row">
+  <div class="col-sm-12 col-md-5">
+    <div class="d-none d-md-block">
+      <img src="assets/images/login.svg" class="image" />
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6">
+    <div class="logo1">
+      <img src="assets/images/logo.png" class="logo" />
+    </div>
+    <div class="forms">
+      <h1 class="title">Login</h1>
+      <form [formGroup]="lForm" (ngSubmit)="onSubmit(lForm.value)">
+        <div formGroupName="userData">
+          <label>Username</label>
+          <input type="text" id="username" formControlName="username" />
+
+          <label>Password</label>
+          <input type="password" id="password" formControlName="password" />
+
+          <button>Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
