@@ -39,7 +39,7 @@ public class AdminController {
 		return appUserService.gettingAllUsers();
 	}
 	
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/user/delete/{id}")
 	 public  ResponseEntity<String> deleteuser(@PathVariable int id){
 		Optional<AppUser> userd=userRepository.findById((long) id);
 		if(userd.isPresent()) {
