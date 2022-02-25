@@ -1,4 +1,4 @@
-package com.sailssoft.model;
+package com.sailssoft.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

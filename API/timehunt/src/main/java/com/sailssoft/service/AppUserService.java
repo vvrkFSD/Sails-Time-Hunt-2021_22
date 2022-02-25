@@ -1,10 +1,15 @@
 package com.sailssoft.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,15 +17,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.sailssoft.dao.AppUserRepository;
+import com.sailssoft.dao.ProjectRepository;
+import com.sailssoft.dao.UserTransactionRepository;
+import com.sailssoft.dto.AppUserRole;
+import com.sailssoft.dto.ChangePassword;
+import com.sailssoft.dto.CustomUserDetails;
 import com.sailssoft.dto.EmailSender;
 import com.sailssoft.dto.EmailValidator;
 import com.sailssoft.dto.RegistrationRequest;
 import com.sailssoft.dto.ResetPasswordRequest;
-import com.sailssoft.model.CustomUserDetails;
 import com.sailssoft.model.AppUser;
-import com.sailssoft.model.AppUserRole;
-import com.sailssoft.model.ChangePassword;
 import com.sailssoft.model.ConfirmationToken;
+import com.sailssoft.model.Project;
+import com.sailssoft.model.UserTransaction;
 
 import lombok.AllArgsConstructor;
 
@@ -33,14 +42,12 @@ public class AppUserService implements UserDetailsService{
 			"user with email %s not found";
 
 	private final AppUserRepository appUserRepository;
+	private final UserTransactionRepository userTransactionRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final ConfirmationTokenService confirmationTokenService;
 	private final EmailValidator emailValidator;
 	private final EmailSender emailSender;
-
-	//@Value("${email.body}")
-	//private String emailBody;
-	//private String emailBody ="some text";
+	private final ProjectRepository projectRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -48,20 +55,47 @@ public class AppUserService implements UserDetailsService{
 		if(appuser==null) {
 			throw new UsernameNotFoundException(USER_NOT_FOUND_MSG);
 		}
-
 		return new CustomUserDetails(appuser);
 	}
 
-	public String singnUpUser(AppUser user) {
+
+	public ResponseEntity<?> login(AppUser user,HttpSession session){
+		AppUser isValid = appUserRepository.findByEmail(user.getEmail());
+		if(isValid==null)
+			return new ResponseEntity<String>("user not found",HttpStatus.NOT_FOUND);
+
+		if(!bCryptPasswordEncoder.matches(user.getPassword(), isValid.getPassword())) {
+			return new ResponseEntity<String>("password does not match",HttpStatus.UNAUTHORIZED);
+		}
+
+		session.setAttribute("email", user.getEmail());
+		return new ResponseEntity<AppUser>(user,HttpStatus.OK);
+	}
+
+
+	public ResponseEntity<?> login2(AppUser user, HttpSession session) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public ResponseEntity<String> logout(HttpSession session){
+		if(session.getAttribute("email")==null)
+			return new ResponseEntity<String>("please login first",HttpStatus.NOT_FOUND);
+		session.removeAttribute("email");
+		session.invalidate();
+		return new ResponseEntity<String>("successfully logged out",HttpStatus.OK);
+	}
+
+	public ResponseEntity<?> singnUpUser(AppUser user) {
 		AppUser userExists = appUserRepository.findByEmail(user.getEmail());
-		if(userExists!=null) {
-			throw new IllegalStateException("email already taken");
+		if(userExists!=null&&userExists.getAppUserRole().name().equals("USER")) {
+			return new ResponseEntity<String>("email already taken",HttpStatus.SEE_OTHER);
 		}
 
 		boolean isValidEmail = emailValidator.test(user.getEmail());
 
 		if(!isValidEmail) {
-			throw new IllegalStateException("Email not valid");
+			return new ResponseEntity<String>("Email not valid",HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 		emailSender.send(user.getEmail(),"use P@ssword!");
@@ -72,75 +106,74 @@ public class AppUserService implements UserDetailsService{
 		user.setPassword(encodedPassword);
 		user.setAppUserRole(AppUserRole.USER);
 
-		//  AppUser appuser = new AppUser(null,null,user.getEmail(),encodedPassword,AppUserRole.USER);
-
 		appUserRepository.save(user);
 
-		return "user saved";
+		return new ResponseEntity<AppUser>(user,HttpStatus.CREATED);
 	}
 
 
-	public boolean changePassword(String token, ResetPasswordRequest resetPassword) {
+	public ResponseEntity<String> changePassword(String token, ResetPasswordRequest resetPassword) {
 		ConfirmationToken confirmationToken = confirmationTokenService.getToken(token);
 		if(!resetPassword.getPassword().equals(resetPassword.getConfirmPassword())) {
-			throw new IllegalStateException("password doesnt match");
+			return new ResponseEntity<String>("password doesnt match",HttpStatus.UNAUTHORIZED);
 		}
 		AppUser appUser = confirmationToken.getAppUser();
 		appUser.setPassword(bCryptPasswordEncoder
 				.encode(resetPassword.getPassword()));
 		appUserRepository.save(appUser);
-		return true;
+		return new ResponseEntity<String>("password changed successfully",HttpStatus.OK);
 	}
 
-	public boolean changePasswordWithOldPassword(ChangePassword changePassword) {
+
+	public ResponseEntity<String> changePasswordWithOldPassword(ChangePassword changePassword) {
 		AppUser appUser = appUserRepository.findByEmail(changePassword.getEmail());
 
 		if(appUser==null) {
-			throw new IllegalStateException("User not found");
+			return new ResponseEntity<String>("User not found",HttpStatus.NOT_FOUND);
 		}
 
 		if(!bCryptPasswordEncoder.matches(changePassword.getOldPassword(), appUser.getPassword())) {
-			throw new IllegalStateException("password does not match");
+			return new ResponseEntity<String>("password does not match",HttpStatus.UNAUTHORIZED);
 		}
 
 
 		appUser.setPassword(bCryptPasswordEncoder.encode(changePassword.getNewPassword()));
 		appUserRepository.save(appUser);
-		return true;
+		return new ResponseEntity<String>("password changed successfully",HttpStatus.OK);
 	}
 
 	@Transactional
-	public boolean confirmToken(String token) {
+	public ResponseEntity<String> confirmToken(String token) {
 		ConfirmationToken confirmationToken = confirmationTokenService.getToken(token);
 		if(confirmationToken==null) {
-			throw new IllegalStateException("token not found");
+			return new ResponseEntity<String>("token not found",HttpStatus.NOT_FOUND);
 		}
 
 		if (confirmationToken.getConfirmedAt() != null) {
-			throw new IllegalStateException("email already confirmed");
+			return new ResponseEntity<String>("email already confirmed",HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 		LocalDateTime expiredAt = confirmationToken.getExpiredAt();
 
 		if (expiredAt.isBefore(LocalDateTime.now())) {
-			throw new IllegalStateException("token expired");
+			return new ResponseEntity<String>("token expired",HttpStatus.UNAUTHORIZED);
 		}
 
 		confirmationTokenService.setConfirmedAt(token);
-		return true;
+		return new ResponseEntity<String>("token confirmed",HttpStatus.ACCEPTED);
 	}
 
-	public String register(RegistrationRequest request) {
+	public ResponseEntity<String> register(RegistrationRequest request) {
 		boolean isValidEmail = emailValidator.test(request.getEmail());
 
 		if(!isValidEmail) {
-			throw new IllegalStateException("Email not valid");
+			return new ResponseEntity<String>("Email not valid",HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 		AppUser appUser = appUserRepository.findByEmail(request.getEmail());
 
 		if(appUser==null) {
-			throw new IllegalStateException("User not found");
+			return new ResponseEntity<String>("User not found",HttpStatus.NOT_FOUND);
 		}
 
 		String token = UUID.randomUUID().toString();
@@ -156,23 +189,57 @@ public class AppUserService implements UserDetailsService{
 				confirmationToken);
 		String link = "http://localhost:8080/api/v1/forgot_password/reset?token="+token;
 		emailSender.send(request.getEmail(),link);
-		return token;
+		return new ResponseEntity<String>("Email Sent",HttpStatus.OK);
 	}
 
-	public String updateProfile(AppUser appUser) {
+	public ResponseEntity<String> updateProfile(AppUser appUser) {
 		AppUser user = appUserRepository.findByEmail(appUser.getEmail());
 		if(appUser.getDOB()!=null) {
 			user.setDOB(appUser.getDOB());
 		}
-		
+
 		if(appUser.getGender()!=null) {
 			user.setGender(appUser.getGender());
 		}
+		if(appUser.getFirstName()!=null) {
+			user.setFirstName(appUser.getFirstName());
+		}
+		if(appUser.getLastName()!=null) {
+			user.setLastName(appUser.getLastName());
+		}
 		appUserRepository.save(user);
-		return "user profile updated";
+		return new ResponseEntity<String>("user profile updated",HttpStatus.OK);
 	}
 
-	public List<AppUser> gettingAllUsers() {
-		return appUserRepository.findAllUsers();
+	public ResponseEntity<List<String>> gettingAllUsers() {
+		List<AppUser> allUsers= appUserRepository.findAll();
+		List<String> users = new ArrayList<>();
+
+		for(int i=0;i<allUsers.size();i++) {
+			users.add(allUsers.get(i).email);
+		}
+
+		return new ResponseEntity<List<String>>(users,HttpStatus.OK);
 	}
+
+	public ResponseEntity<String> addUserTransaction(UserTransaction userTransaction,String email){
+		AppUser user = appUserRepository.findByEmail(email);
+		
+		userTransactionRepository.save(userTransaction);
+		return new ResponseEntity<String>("added successfully",HttpStatus.CREATED);
+	}
+
+
+	public ResponseEntity<List<UserTransaction>> getAllUserTransactions(String email) {
+		
+		List<UserTransaction> trans = userTransactionRepository.findAll();
+		return new ResponseEntity<List<UserTransaction>>(trans,HttpStatus.OK);
+	}
+
+	public ResponseEntity<?> addProject(Project project,String email){
+		
+		projectRepository.save(project);
+		return new ResponseEntity<Project>(project,HttpStatus.CREATED);
+	}
+	
 }

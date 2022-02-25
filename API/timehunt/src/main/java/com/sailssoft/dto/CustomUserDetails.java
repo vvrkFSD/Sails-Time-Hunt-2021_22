@@ -1,10 +1,12 @@
-package com.sailssoft.model;
+package com.sailssoft.dto;
 
 import java.util.Collection;
 import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.sailssoft.model.AppUser;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
