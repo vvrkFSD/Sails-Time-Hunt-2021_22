@@ -12,11 +12,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.sailssoft.dao.AppUserRepository;
+import com.sailssoft.dao.ProjectRepository;
 import com.sailssoft.dto.EmailSender;
 import com.sailssoft.dto.EmailValidator;
 import com.sailssoft.dto.RegistrationRequest;
 import com.sailssoft.dto.ResetPasswordRequest;
 import com.sailssoft.model.CustomUserDetails;
+import com.sailssoft.model.Project;
 import com.sailssoft.model.AppUser;
 import com.sailssoft.model.AppUserRole;
 import com.sailssoft.model.ChangePassword;
@@ -37,10 +39,10 @@ public class AppUserService implements UserDetailsService{
 	private final ConfirmationTokenService confirmationTokenService;
 	private final EmailValidator emailValidator;
 	private final EmailSender emailSender;
+	
+	private ProjectRepository projectRepository;
 
-	//@Value("${email.body}")
-	//private String emailBody;
-	//private String emailBody ="some text";
+	
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -72,7 +74,7 @@ public class AppUserService implements UserDetailsService{
 		user.setPassword(encodedPassword);
 		user.setAppUserRole(AppUserRole.USER);
 
-		//  AppUser appuser = new AppUser(null,null,user.getEmail(),encodedPassword,AppUserRole.USER);
+	
 
 		appUserRepository.save(user);
 
@@ -174,5 +176,9 @@ public class AppUserService implements UserDetailsService{
 
 	public List<AppUser> gettingAllUsers() {
 		return appUserRepository.findAllUsers();
+	}
+
+	public List<Project> allProjects(){
+		return projectRepository.findAllProjects();
 	}
 }
