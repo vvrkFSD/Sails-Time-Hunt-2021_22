@@ -26,6 +26,8 @@ import com.sailssoft.dto.EmailSender;
 import com.sailssoft.dto.EmailValidator;
 import com.sailssoft.dto.RegistrationRequest;
 import com.sailssoft.dto.ResetPasswordRequest;
+
+import com.sailssoft.model.Project;
 import com.sailssoft.model.AppUser;
 import com.sailssoft.model.ConfirmationToken;
 import com.sailssoft.model.Project;
@@ -47,7 +49,9 @@ public class AppUserService implements UserDetailsService{
 	private final ConfirmationTokenService confirmationTokenService;
 	private final EmailValidator emailValidator;
 	private final EmailSender emailSender;
+
 	private final ProjectRepository projectRepository;
+
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -241,5 +245,8 @@ public class AppUserService implements UserDetailsService{
 		projectRepository.save(project);
 		return new ResponseEntity<Project>(project,HttpStatus.CREATED);
 	}
-	
+
+	public List<Project> allProjects(){
+		return projectRepository.findAllProjects();
+	}
 }

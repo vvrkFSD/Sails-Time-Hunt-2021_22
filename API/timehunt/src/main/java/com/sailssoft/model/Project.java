@@ -37,7 +37,7 @@ public class Project {
 	private Long projectId;
 	private String name;
 	private String description;
-	private boolean active;
+	private String status;
 
 	@ManyToOne
 	@JoinColumn(
