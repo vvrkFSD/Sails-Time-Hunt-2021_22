@@ -1,6 +1,7 @@
 package com.sailssoft.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,7 +42,7 @@ public class AppUser {
 	)
 	private Long id;
 	@Column(name="Date_Of_Birth")
-	private LocalDate DOB;
+	private Date DOB;
 	@Column(name="gender")
 	private String gender;
 	@Column(name="first_name")
@@ -55,7 +56,7 @@ public class AppUser {
 	
 	
 	
-	public AppUser(LocalDate DOB, String gender, String email, String password, AppUserRole appUserRole) {
+	public AppUser(Date DOB, String gender, String email, String password, AppUserRole appUserRole) {
 		super();
 		this.DOB = DOB;
 		this.gender = gender;
@@ -63,15 +64,13 @@ public class AppUser {
 		this.password = password;
 		this.appUserRole = appUserRole;
 	}
-
-	@OneToOne(cascade = CascadeType.ALL,
-			fetch = FetchType.EAGER,
-			optional = false)
+	
+	@ManyToOne
 	@JoinColumn(
-			nullable=false,
-			name="project_id",
-			referencedColumnName="projectId"
+			nullable =true,
+			name="project_id"
 	)
 	private Project project;
+
 
 }

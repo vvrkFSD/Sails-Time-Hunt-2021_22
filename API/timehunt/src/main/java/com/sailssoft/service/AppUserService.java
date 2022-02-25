@@ -90,19 +90,20 @@ public class AppUserService implements UserDetailsService{
 		return new ResponseEntity<String>("successfully logged out",HttpStatus.OK);
 	}
 
-	public ResponseEntity<?> singnUpUser(AppUser user) {
-		AppUser userExists = appUserRepository.findByEmail(user.getEmail());
+	public ResponseEntity<?> singnUpUser(String email) {
+		AppUser userExists = appUserRepository.findByEmail(email);
 		if(userExists!=null&&userExists.getAppUserRole().name().equals("USER")) {
 			return new ResponseEntity<String>("email already taken",HttpStatus.SEE_OTHER);
 		}
 
+		AppUser user = new AppUser();
 		boolean isValidEmail = emailValidator.test(user.getEmail());
 
 		if(!isValidEmail) {
 			return new ResponseEntity<String>("Email not valid",HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
-		emailSender.send(user.getEmail(),"use P@ssword!");
+		emailSender.send(email,"use P@ssword!");
 
 		String encodedPassword = bCryptPasswordEncoder
 				.encode("P@ssword!");
@@ -225,21 +226,8 @@ public class AppUserService implements UserDetailsService{
 
 		return new ResponseEntity<List<String>>(users,HttpStatus.OK);
 	}
-
-	public ResponseEntity<String> addUserTransaction(UserTransaction userTransaction,String email){
-		AppUser user = appUserRepository.findByEmail(email);
-		
-		userTransactionRepository.save(userTransaction);
-		return new ResponseEntity<String>("added successfully",HttpStatus.CREATED);
-	}
-
-
-	public ResponseEntity<List<UserTransaction>> getAllUserTransactions(String email) {
-		
-		List<UserTransaction> trans = userTransactionRepository.findAll();
-		return new ResponseEntity<List<UserTransaction>>(trans,HttpStatus.OK);
-	}
-
+	
+	
 	public ResponseEntity<?> addProject(Project project,String email){
 		
 		projectRepository.save(project);
@@ -249,4 +237,35 @@ public class AppUserService implements UserDetailsService{
 	public List<Project> allProjects(){
 		return projectRepository.findAllProjects();
 	}
+	
+	public ResponseEntity<?>  assaigningProjectToUser(Long projectId,Long userId){
+		Optional<AppUser> user = appUserRepository.findById(userId);
+		Optional<Project> project = projectRepository.findById(projectId);
+		if(user.isPresent()&&project.isPresent()) {
+			user.get().setProject(project.get());
+			appUserRepository.save(user.get());
+			return new ResponseEntity<AppUser>(user.get(),HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<String>("not found",HttpStatus.NOT_FOUND);
+		
+	}
+	
+	public ResponseEntity<String> addUserTransaction(UserTransaction userTransaction,String email,String projectName){
+		AppUser user = appUserRepository.findByEmail(email);
+		userTransaction.setUser(user);
+		
+		userTransactionRepository.save(userTransaction);
+		return new ResponseEntity<String>("added successfully",HttpStatus.CREATED);
+	}
+
+
+	public ResponseEntity<List<UserTransaction>> getAllUserTransactions(String email) {
+		
+		AppUser user =appUserRepository.findByEmail(email);
+		
+		List<UserTransaction> trans = userTransactionRepository.getAllUserTransactions(user.getId());
+		return new ResponseEntity<List<UserTransaction>>(trans,HttpStatus.OK);
+	}
+
 }

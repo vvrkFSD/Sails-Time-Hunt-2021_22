@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,6 +39,7 @@ public class UserTransaction {
 	@Column(name="department_transaction_id")
 	private Long id;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(
 			nullable =true,
@@ -44,12 +47,6 @@ public class UserTransaction {
 	)
 	private AppUser user;
 	
-	@ManyToOne
-	@JoinColumn(
-			nullable =true,
-			name="alloted_project_id"
-	)
-	private Project project;
 	
 	private String taskName;
 	private String description;

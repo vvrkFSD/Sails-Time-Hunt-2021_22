@@ -46,8 +46,5 @@ public class Project {
 	)
 	private Client client;
 	
-	
-	 @OneToOne(mappedBy="project")
-	   private AppUser user;
 
 }

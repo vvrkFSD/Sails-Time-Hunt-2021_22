@@ -72,7 +72,7 @@ public class UserController {
     	return appUserService.updateProfile(user);
     }
 
-    @PostMapping("/profile/changePassword")
+    @PostMapping("profile/changePassword")
 	public ResponseEntity<String> changePasswordWithOldPassword(@RequestBody ChangePassword changePassword) {
 		return appUserService.changePasswordWithOldPassword(changePassword);	
 	}
@@ -84,7 +84,7 @@ public class UserController {
 		return new ResponseEntity<String>("welcome to admin home page",HttpStatus.OK);
 	}
 	
-	@GetMapping(path="home")
+	@GetMapping(path="user/home")
 	public ResponseEntity<String> userHomePage() {
 		return new ResponseEntity<String>("user home page",HttpStatus.OK);
 	}
