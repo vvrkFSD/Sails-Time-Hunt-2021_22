@@ -35,7 +35,7 @@ public class Project {
 	private Long id;
 	private String name;
 	private String description;
-	private boolean active;
+	private String status;
 
 	@ManyToOne
 	@JoinColumn(
@@ -43,4 +43,5 @@ public class Project {
 			name="client_id"
 	)
 	private Client client;
+	
 }
