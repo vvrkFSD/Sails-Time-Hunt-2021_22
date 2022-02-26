@@ -35,7 +35,6 @@ public class AdminController {
 	
 	private ClientRepository clientRepository;
 	
-	private ProjectRepository projectRepository;
 
 	@PostMapping(path="users")
 	public String addUser(@RequestBody AppUser user) {
@@ -53,10 +52,10 @@ public class AdminController {
 		Optional<AppUser> userd=userRepository.findById((long) id);
 		if(userd.isPresent()) {
 			userRepository.delete(userd.get());
-			return new ResponseEntity<String>(HttpStatus.OK);
+			return new ResponseEntity<String>("user deleted successfully",HttpStatus.OK);
 		}
 		else {
-			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("user not available",HttpStatus.NO_CONTENT);
 		}
 	}
 	
@@ -64,7 +63,7 @@ public class AdminController {
 	public ResponseEntity<String> addClient(@RequestBody Client client) {
 		
 		clientRepository.save(client);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
+		return new ResponseEntity<String>("client added",HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("delete/client/{id}")
@@ -72,10 +71,10 @@ public class AdminController {
 		Optional<Client> client_id=clientRepository.findById((long)id);
 		if(client_id.isPresent()) {
 			clientRepository.delete(client_id.get());
-			return new ResponseEntity<String>(HttpStatus.OK);
+			return new ResponseEntity<String>("client deleted successfully",HttpStatus.OK);
 		}
 		else {
-			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>("client not available",HttpStatus.NO_CONTENT);
 		}
 		
 	}
@@ -87,36 +86,5 @@ public class AdminController {
 	
 	
 	
-	@PostMapping("/project")
-	public ResponseEntity<String> addProject(@RequestBody Project project) {
-		
-		projectRepository.save(project);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
-	}
 	
-	//Deleting Project
-	@DeleteMapping("delete/project/{id}")
-	public ResponseEntity<String> deleteProject(@PathVariable int id){
-		Optional<Project> project_id=projectRepository.findById((long)id);
-		if(project_id.isPresent()) {
-			projectRepository.delete(project_id.get());
-			return new ResponseEntity<String>("project deleted successfully",HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<String>("project is not available",HttpStatus.NO_CONTENT);
-		}
-		
-	}
-	
-	@PutMapping("/update/project")
-	 public Optional<Project> updateProject(@RequestBody Project project) {
-		
-		 projectRepository.save(project);
-		 return projectRepository.findById(project.getId());
-	 }
-	
-	@GetMapping("/projects")
-	public List<Project> getAllProjects(){
-		return appUserService.allProjects();
-	}
 }

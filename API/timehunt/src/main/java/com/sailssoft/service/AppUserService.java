@@ -2,9 +2,12 @@ package com.sailssoft.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -178,7 +181,5 @@ public class AppUserService implements UserDetailsService{
 		return appUserRepository.findAllUsers();
 	}
 
-	public List<Project> allProjects(){
-		return projectRepository.findAllProjects();
-	}
+
 }
