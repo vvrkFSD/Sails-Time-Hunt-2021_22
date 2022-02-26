@@ -25,7 +25,7 @@ import com.sailssoft.service.AppUserService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 @AllArgsConstructor
 @SessionAttributes("setUser")
 public class UserController {

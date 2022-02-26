@@ -82,9 +82,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/v*/forgot_password/**")
                     .permitAll()
                     .antMatchers("/api/v*/user/*")
+
             		.hasAuthority("USER")
             		.antMatchers("/api/v*/admin/*")
             		.hasAuthority("ADMIN")
+
                 .anyRequest()
                 .authenticated().and()
                 .formLogin();

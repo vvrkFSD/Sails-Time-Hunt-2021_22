@@ -37,7 +37,6 @@ public class AdminController {
 	
 	private ClientRepository clientRepository;
 	
-	private ProjectRepository projectRepository;
 
 
 	@PostMapping(path="/admin/users")
@@ -66,7 +65,9 @@ public class AdminController {
 			return new ResponseEntity<String>("user deleted successfully",HttpStatus.OK);
 		}
 		else {
+
 			return new ResponseEntity<String>("user not found",HttpStatus.NOT_FOUND);
+
 		}
 	}
 
@@ -86,7 +87,9 @@ public class AdminController {
 			return new ResponseEntity<String>("client deleted successfully",HttpStatus.OK);
 		}
 		else {
+
 			return new ResponseEntity<String>("clent not found",HttpStatus.NO_CONTENT);
+
 		}
 		
 	}
@@ -98,36 +101,5 @@ public class AdminController {
 	
 	
 	
-	@PostMapping("/admin/project")
-	public ResponseEntity<String> addProject(@RequestBody Project project) {
-		
-		projectRepository.save(project);
-		return new ResponseEntity<String>("project saved",HttpStatus.CREATED);
-	}
-	
-	//Deleting Project
-	@DeleteMapping("/admin/delete/project/{id}")
-	public ResponseEntity<String> deleteProject(@PathVariable int id){
-		Optional<Project> project_id=projectRepository.findById((long)id);
-		if(project_id.isPresent()) {
-			projectRepository.delete(project_id.get());
-			return new ResponseEntity<String>("project deleted successfully",HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<String>("project is not available",HttpStatus.NO_CONTENT);
-		}
-		
-	}
-	
-	@PutMapping("/admin/update/project")
-	 public Optional<Project> updateProject(@RequestBody Project project) {
-		
-		 projectRepository.save(project);
-		 return projectRepository.findById(project.getProjectId());
-	 }
-	
-	@GetMapping("/admin/projects")
-	public List<Project> getAllProjects(){
-		return appUserService.allProjects();
-	}
+
 }
