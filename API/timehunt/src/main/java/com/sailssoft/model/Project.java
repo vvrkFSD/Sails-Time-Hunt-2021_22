@@ -1,5 +1,7 @@
 package com.sailssoft.model;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,6 +38,8 @@ public class Project {
 	private String name;
 	private String description;
 	private String status;
+	private Date start_Date;
+	private Date End_date;
 
 	@ManyToOne
 	@JoinColumn(

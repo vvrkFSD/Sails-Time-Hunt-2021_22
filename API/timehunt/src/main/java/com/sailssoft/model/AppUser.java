@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import lombok.AllArgsConstructor;
@@ -43,6 +45,14 @@ public class AppUser {
 	@Enumerated(EnumType.STRING)
 	private AppUserRole appUserRole;
 	
+	@ManyToOne
+	@JoinColumn(
+			nullable =false,
+			name="dept_name"
+	)
+	private Department department;
+	
+	
 	public AppUser(Date DOB, String gender, String email, String password, AppUserRole appUserRole) {
 		super();
 		this.DOB = DOB;
@@ -50,6 +60,7 @@ public class AppUser {
 		this.email = email;
 		this.password = password;
 		this.appUserRole = appUserRole;
+		
 	}
 
 
