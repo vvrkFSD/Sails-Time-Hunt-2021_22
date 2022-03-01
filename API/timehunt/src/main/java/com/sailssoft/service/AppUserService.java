@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
 import javax.servlet.http.HttpSession;
-
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -236,7 +234,6 @@ public class AppUserService implements UserDetailsService{
 		return new ResponseEntity<Project>(project,HttpStatus.CREATED);
 	}
 
-
 	public List<Project> allProjects(){
 		return projectRepository.findAllProjects();
 	}
@@ -270,6 +267,5 @@ public class AppUserService implements UserDetailsService{
 		List<UserTransaction> trans = userTransactionRepository.getAllUserTransactions(user.getId());
 		return new ResponseEntity<List<UserTransaction>>(trans,HttpStatus.OK);
 	}
-
 
 }
