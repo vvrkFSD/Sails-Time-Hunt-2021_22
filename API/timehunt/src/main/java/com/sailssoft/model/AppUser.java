@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import com.sailssoft.dto.AppUserRole;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,8 +52,12 @@ public class AppUser {
 	private String password;
 	@Enumerated(EnumType.STRING)
 	private AppUserRole appUserRole;
-	
-	
+	@ManyToOne
+	@JoinColumn(
+			nullable =false,
+			name="dept_name"
+	)
+	private Department department;
 	
 	public AppUser(Date DOB, String gender, String email, String password, AppUserRole appUserRole) {
 		super();
@@ -63,6 +66,7 @@ public class AppUser {
 		this.email = email;
 		this.password = password;
 		this.appUserRole = appUserRole;
+		
 	}
 	
 	@ManyToOne

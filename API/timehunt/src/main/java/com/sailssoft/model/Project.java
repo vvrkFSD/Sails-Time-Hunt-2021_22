@@ -1,6 +1,7 @@
 package com.sailssoft.model;
 
-import javax.persistence.CascadeType;
+
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,6 +39,8 @@ public class Project {
 	private String name;
 	private String description;
 	private String status;
+	private Date start_Date;
+	private Date End_date;
 
 	@ManyToOne
 	@JoinColumn(
