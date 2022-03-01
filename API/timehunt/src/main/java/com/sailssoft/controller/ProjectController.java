@@ -1,10 +1,10 @@
 package com.sailssoft.controller;
 
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.sailssoft.model.Project;
 import com.sailssoft.service.ProjectService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/api/v1")
 @AllArgsConstructor
 public class ProjectController {
 
@@ -45,6 +46,8 @@ public class ProjectController {
 		return  projectService.updateProject(project);
 
   
-
+	
+	
 	}
+
 }
