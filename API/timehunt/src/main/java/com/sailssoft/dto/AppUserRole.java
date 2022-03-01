@@ -1,4 +1,4 @@
-package com.sailssoft.model;
+package com.sailssoft.dto;
 
 public enum AppUserRole {
 

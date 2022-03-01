@@ -2,6 +2,10 @@ package com.sailssoft.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,80 +14,79 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.sailssoft.dao.AppUserRepository;
+import com.sailssoft.dto.ChangePassword;
 import com.sailssoft.dto.RegistrationRequest;
 import com.sailssoft.dto.ResetPasswordRequest;
 import com.sailssoft.model.AppUser;
-import com.sailssoft.model.ChangePassword;
+import com.sailssoft.model.UserTransaction;
 import com.sailssoft.service.AppUserService;
 import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/user")
 @AllArgsConstructor
-
+@SessionAttributes("setUser")
 public class UserController {
 	
 	private final AppUserService appUserService;
-
-	@GetMapping(path="forgot_password")
-	public String displayForgotPasswordPage() {
-		return "forgot password page";
-		 //TODO : sending forgotPage link
-	}
 	
+	@PostMapping(path="login")
+	public ResponseEntity<?> login(@RequestBody AppUser user,HttpSession session){
+		
+		return appUserService.login(user, session);
+	} 
+	
+	@PostMapping(path="login2")
+	public ResponseEntity<?> login2(@RequestBody AppUser user,HttpSession session){
+		
+		return appUserService.login2(user, session);
+	} 
+	
+	
+	
+	@GetMapping(path="logout")
+	public ResponseEntity<String> logout(HttpSession session){
+		return appUserService.logout(session);
+	}
+
 	@PostMapping(path="forgot_password")
-    public String sendingEmailToGetTokenForChangingPassword(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<String> sendingEmailToGetTokenForChangingPassword(@RequestBody RegistrationRequest request) {
         return appUserService.register(request);
     }
 
     @GetMapping(path = "forgot_password/reset")
-    public String sendingTokenToChangePassword(@RequestParam("token") String token) {
-        if(appUserService.confirmToken(token)) {
-        	return "forgot_page_toChangePassword";
-        }
-        //TODO :change password page for forgot_password
-       return "something gone wrong";
+    public ResponseEntity<String> sendingTokenToChangePassword(@RequestParam("token") String token) {
+        return appUserService.confirmToken(token);
+        
     }
     
     @PostMapping(path="forgot_password/reset")
-    public String changePassword(@RequestParam("token") String token,@RequestBody ResetPasswordRequest resetPassword) {
-        if(appUserService.changePassword(token,resetPassword)) {
-        	return "changed successfully";
-        }
-        //TODO :change password page for forgot_password
-       return "something gone wrong";
+    public ResponseEntity<String> changePassword(@RequestParam("token") String token,@RequestBody ResetPasswordRequest resetPassword) {
+        return appUserService.changePassword(token,resetPassword);
     }
     
     @PutMapping(path="profile")
-    public String updateProfile(@RequestBody AppUser user) {
+    public ResponseEntity<String> updateProfile(@RequestBody AppUser user) {
     	return appUserService.updateProfile(user);
     }
 
-    @PostMapping("/profile/changePassword")
-	public String changePasswordWithOldPassword(@RequestBody ChangePassword changePassword) {
-	
-		boolean valid = appUserService.changePasswordWithOldPassword(changePassword);
-		if(!valid)return "somthing went wrong";
-		return "successfully changed";
+    @PostMapping("profile/changePassword")
+	public ResponseEntity<String> changePasswordWithOldPassword(@RequestBody ChangePassword changePassword) {
+		return appUserService.changePasswordWithOldPassword(changePassword);	
 	}
     
-    @GetMapping(path="login")
-	public String gettingLoginPage() {
-		//TODO: return login page
-		return "loginpage";
-	}
-	
+   
 	@GetMapping(path="admin")
-	public String adminPage() {
-		//TODO:return admin home page
-		return "admin home page";
+	public ResponseEntity<String> adminPage() {
+	
+		return new ResponseEntity<String>("welcome to admin home page",HttpStatus.OK);
 	}
 	
-	@GetMapping(path="home")
-	public String userHomePage() {
-		return "user home page";
+	@GetMapping(path="user/home")
+	public ResponseEntity<String> userHomePage() {
+		return new ResponseEntity<String>("user home page",HttpStatus.OK);
 	}
 	
 	

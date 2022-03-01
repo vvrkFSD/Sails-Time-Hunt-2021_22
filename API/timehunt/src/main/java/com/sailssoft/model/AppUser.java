@@ -1,18 +1,22 @@
 package com.sailssoft.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-
+import com.sailssoft.dto.AppUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,18 +44,20 @@ public class AppUser {
 	private Date DOB;
 	@Column(name="gender")
 	private String gender;
-	private String email;
+	@Column(name="first_name")
+	private String firstName;
+	@Column(name="last_name")
+	private String lastName;
+	public String email;
 	private String password;
 	@Enumerated(EnumType.STRING)
 	private AppUserRole appUserRole;
-	
 	@ManyToOne
 	@JoinColumn(
 			nullable =false,
 			name="dept_name"
 	)
 	private Department department;
-	
 	
 	public AppUser(Date DOB, String gender, String email, String password, AppUserRole appUserRole) {
 		super();
@@ -62,6 +68,13 @@ public class AppUser {
 		this.appUserRole = appUserRole;
 		
 	}
+	
+	@ManyToOne
+	@JoinColumn(
+			nullable =true,
+			name="project_id"
+	)
+	private Project project;
 
 
 }
