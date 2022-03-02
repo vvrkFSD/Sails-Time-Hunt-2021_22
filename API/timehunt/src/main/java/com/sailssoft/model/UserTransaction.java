@@ -1,7 +1,6 @@
 package com.sailssoft.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

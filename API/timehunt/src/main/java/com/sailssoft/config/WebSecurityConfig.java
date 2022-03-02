@@ -12,13 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.sailssoft.service.AppUserService;
+import com.sailssoft.service.AppUserServiceIml;
 
 
 @Configuration
@@ -27,7 +25,7 @@ import com.sailssoft.service.AppUserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-    private final AppUserService appUserService;
+    private final AppUserServiceIml appUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 

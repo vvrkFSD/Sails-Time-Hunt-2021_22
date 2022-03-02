@@ -1,27 +1,20 @@
 package com.sailssoft.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
 import com.sailssoft.dto.ChangePassword;
 import com.sailssoft.dto.RegistrationRequest;
 import com.sailssoft.dto.ResetPasswordRequest;
 import com.sailssoft.model.AppUser;
-import com.sailssoft.model.UserTransaction;
-import com.sailssoft.service.AppUserService;
+import com.sailssoft.service.AppUserServiceIml;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -30,7 +23,7 @@ import lombok.AllArgsConstructor;
 
 public class UserController {
 	
-	private final AppUserService appUserService;
+	private final AppUserServiceIml appUserService;
 	
 	
 	@PostMapping(path="forgot_password")
