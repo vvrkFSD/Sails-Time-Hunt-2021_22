@@ -14,9 +14,9 @@ public interface UserTransactionRepository extends JpaRepository<UserTransaction
 	@Query(value="select *  from user_transaction where user_transaction.user_id=?1",nativeQuery=true)
 	List<UserTransaction> getAllUserTransactions(Long id);
 	
+	@Query(value="select * from user_transaction where year(user_transaction.task_date)=?1 and month(user_transaction.task_date)=?2 and day(user_transaction.task_date)=?3 and user_transaction.user_id=?4",nativeQuery=true)
+	List<UserTransaction> getAllUserTransactionsByYear(int year,int month,int day,long id);
 	
-	List<UserTransaction> findByTaskDate(String taskDate);
-	
-	List<UserTransaction> findByTaskName(String taskName);
-	
+	@Query(value="delete from user_transaction where year(user_transaction.task_date)=?1 and month(user_transaction.task_date)=?2 and day(user_transaction.task_date)=?3 and user_transaction.user_id=?4",nativeQuery=true)
+	void deleteByDateAndEmail(int year,int month,int day,long id);
 }

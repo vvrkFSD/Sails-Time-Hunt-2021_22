@@ -27,30 +27,12 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/api/v1")
 @AllArgsConstructor
-@SessionAttributes("setUser")
+
 public class UserController {
 	
 	private final AppUserService appUserService;
 	
-	@PostMapping(path="login")
-	public ResponseEntity<?> login(@RequestBody AppUser user,HttpSession session){
-		
-		return appUserService.login(user, session);
-	} 
 	
-	@PostMapping(path="login2")
-	public ResponseEntity<?> login2(@RequestBody AppUser user,HttpSession session){
-		
-		return appUserService.login2(user, session);
-	} 
-	
-	
-	
-	@GetMapping(path="logout")
-	public ResponseEntity<String> logout(HttpSession session){
-		return appUserService.logout(session);
-	}
-
 	@PostMapping(path="forgot_password")
     public ResponseEntity<String> sendingEmailToGetTokenForChangingPassword(@RequestBody RegistrationRequest request) {
         return appUserService.register(request);

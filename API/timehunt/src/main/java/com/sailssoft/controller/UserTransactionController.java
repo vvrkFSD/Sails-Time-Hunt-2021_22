@@ -2,20 +2,18 @@ package com.sailssoft.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
-import com.sailssoft.dao.UserTransactionRepository;
+import com.sailssoft.dto.UserTransactiondto;
 import com.sailssoft.model.UserTransaction;
-import com.sailssoft.service.AppUserService;
+import com.sailssoft.service.UserTransactionService;
 
 import lombok.AllArgsConstructor;
 
@@ -23,43 +21,32 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/v1")
 @AllArgsConstructor
 public class UserTransactionController {
-	private final AppUserService appUserService;
 	
-	private final UserTransactionRepository userTransactionRepository;
+	@Autowired
+	private final UserTransactionService userTransactionService;
+	
 	
 	@PostMapping(path="timesheet")
-	public ResponseEntity<String> addUserTransaction(UserTransaction userTransaction,@RequestParam("email") String email,@RequestParam("projectName") String projectName){
-		return appUserService.addUserTransaction(userTransaction,email,projectName);
+	public ResponseEntity<?> addUserTransaction(@RequestBody UserTransactiondto userTransactiondto){
+		return userTransactionService.addUserTransaction(userTransactiondto);
 	}
 	
 	@GetMapping(path="timesheet/{email}")
 	public ResponseEntity<List<UserTransaction>> gettingUserTransactionsByUserId(@PathVariable("email") String email){
-		return appUserService.getAllUserTransactions(email);
+		return userTransactionService.getAllUserTransactions(email);
 	}
 	
-	/*@DeleteMapping(path="timesheet")
-	public ResponseEntity<?> deletePerticularDayWork(@RequestParam String taskDate){
-		List<UserTransaction> userTransactions = userTransactionRepository.findByTaskDate(taskDate);
-		
-		if(userTransactions==null)return new ResponseEntity<String>("no data found",HttpStatus.NOT_FOUND);
-		for(UserTransaction u:userTransactions) {
-			userTransactionRepository.delete(u);
-		}
-		
-		return new ResponseEntity<String>("deleted successfully",HttpStatus.OK);
+	
+	@GetMapping(path="timesheet/{email}/{date}")
+	public ResponseEntity<List<UserTransaction>> gettingUserTransactionsByDate(@PathVariable("email") String email ,@PathVariable("date") String date){
+		return userTransactionService.getAllUserTransactionsByDate(email,date);
 	}
 	
-	@DeleteMapping(path="timesheet")
-	public ResponseEntity<?> deletePerticularTask(@RequestParam String task){
-		List<UserTransaction> userTransactions = userTransactionRepository.findByTaskName(task);
+	@DeleteMapping(path="timesheet/{email}/{date}")
+	public ResponseEntity<String> deleteDayWork(@PathVariable("email") String email ,@PathVariable("date") String date){
 		
-		if(userTransactions==null)return new ResponseEntity<String>("no data found",HttpStatus.NOT_FOUND);
-		for(UserTransaction u:userTransactions) {
-			userTransactionRepository.delete(u);
-		}
-		
-		return new ResponseEntity<String>("deleted successfully",HttpStatus.OK);
+		return userTransactionService.deleteDayWork(email,date);
 	}
-	*/
+	
 
 }

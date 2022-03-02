@@ -63,32 +63,6 @@ public class AppUserService implements UserDetailsService{
 	}
 
 
-	public ResponseEntity<?> login(AppUser user,HttpSession session){
-		AppUser isValid = appUserRepository.findByEmail(user.getEmail());
-		if(isValid==null)
-			return new ResponseEntity<String>("user not found",HttpStatus.NOT_FOUND);
-
-		if(!bCryptPasswordEncoder.matches(user.getPassword(), isValid.getPassword())) {
-			return new ResponseEntity<String>("password does not match",HttpStatus.UNAUTHORIZED);
-		}
-
-		session.setAttribute("email", user.getEmail());
-		return new ResponseEntity<AppUser>(user,HttpStatus.OK);
-	}
-
-
-	public ResponseEntity<?> login2(AppUser user, HttpSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public ResponseEntity<String> logout(HttpSession session){
-		if(session.getAttribute("email")==null)
-			return new ResponseEntity<String>("please login first",HttpStatus.NOT_FOUND);
-		session.removeAttribute("email");
-		session.invalidate();
-		return new ResponseEntity<String>("successfully logged out",HttpStatus.OK);
-	}
 
 	public ResponseEntity<?> singnUpUser(String email) {
 		AppUser userExists = appUserRepository.findByEmail(email);
@@ -251,21 +225,5 @@ public class AppUserService implements UserDetailsService{
 		
 	}
 	
-	public ResponseEntity<String> addUserTransaction(UserTransaction userTransaction,String email,String projectName){
-		AppUser user = appUserRepository.findByEmail(email);
-		userTransaction.setUser(user);
-		
-		userTransactionRepository.save(userTransaction);
-		return new ResponseEntity<String>("added successfully",HttpStatus.CREATED);
-	}
-
-
-	public ResponseEntity<List<UserTransaction>> getAllUserTransactions(String email) {
-		
-		AppUser user =appUserRepository.findByEmail(email);
-		
-		List<UserTransaction> trans = userTransactionRepository.getAllUserTransactions(user.getId());
-		return new ResponseEntity<List<UserTransaction>>(trans,HttpStatus.OK);
-	}
 
 }

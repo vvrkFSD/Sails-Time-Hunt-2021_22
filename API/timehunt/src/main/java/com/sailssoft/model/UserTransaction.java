@@ -50,7 +50,7 @@ public class UserTransaction {
 	
 	private String taskName;
 	private String description;
-	private String taskDate;
+	private LocalDate taskDate;
 	private String timeSpentInHour;
 	private String timeSpentInMinute;
 
