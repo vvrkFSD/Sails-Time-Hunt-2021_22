@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ public class AdminController {
 	@PostMapping(path="/admin/users")
 	public ResponseEntity<?> addUser(@RequestBody RegistrationRequest user) {
 		
-		return appUserService.singnUpUser(user.getEmail());
+		return appUserService.singnUpUser(user.getEmail(),user.getDepartment());
 	}
 	
 	@GetMapping(path="users")

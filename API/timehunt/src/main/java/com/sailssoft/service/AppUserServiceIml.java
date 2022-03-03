@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.sailssoft.dao.AppUserRepository;
+import com.sailssoft.dao.DepartmentRepository;
 import com.sailssoft.dao.ProjectRepository;
 import com.sailssoft.dto.AppUserRole;
 import com.sailssoft.dto.ChangePassword;
@@ -27,7 +28,7 @@ import com.sailssoft.dto.ResetPasswordRequest;
 import com.sailssoft.model.Project;
 import com.sailssoft.model.AppUser;
 import com.sailssoft.model.ConfirmationToken;
-
+import com.sailssoft.model.Department;
 
 import lombok.AllArgsConstructor;
 
@@ -46,6 +47,7 @@ public class AppUserServiceIml implements UserDetailsService,AppUserService{
 	private final EmailSender emailSender;
 
 	private final ProjectRepository projectRepository;
+	private final DepartmentRepository departmentRepository;
 
 
 	@Override
@@ -60,7 +62,7 @@ public class AppUserServiceIml implements UserDetailsService,AppUserService{
 
 
 	@Override
-	public ResponseEntity<?> singnUpUser(String email) {
+	public ResponseEntity<?> singnUpUser(String email,String dept_name) {
 		AppUser userExists = appUserRepository.findByEmail(email);
 		if(userExists!=null&&userExists.getAppUserRole().name().equals("USER")) {
 			return new ResponseEntity<String>("email already taken",HttpStatus.SEE_OTHER);
@@ -81,6 +83,12 @@ public class AppUserServiceIml implements UserDetailsService,AppUserService{
 		user.setPassword(encodedPassword);
 		user.setAppUserRole(AppUserRole.USER);
         user.setEmail(email);
+        
+        Optional<Department> department = departmentRepository.findById(dept_name);
+        if(department.isPresent()) {
+        	user.setDepartment(department.get());
+        }
+        
 		appUserRepository.save(user);
 
 		return new ResponseEntity<AppUser>(user,HttpStatus.CREATED);

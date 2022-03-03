@@ -12,5 +12,5 @@ public interface ProjectService {
 	public ResponseEntity<String> addProject(Project project);
 	public ResponseEntity<String> deleteProject(int id);
 	public Optional<Project> updateProject(Project project);
-	public List<Project> allProjects();
+	public ResponseEntity<List<Project>> allProjects();
 }

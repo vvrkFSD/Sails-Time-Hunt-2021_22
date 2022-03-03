@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import com.sailssoft.dao.ProjectRepository;
 import com.sailssoft.model.Project;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class ProjectServiceIml implements ProjectService{
 
 	private ProjectRepository projectRepository;
@@ -43,8 +46,8 @@ public class ProjectServiceIml implements ProjectService{
 	}
 	
 	@Override
-	public List<Project> allProjects(){
-		return projectRepository.findAllProjects();
+	public ResponseEntity<List<Project>> allProjects(){
+		return new ResponseEntity<List<Project>>(projectRepository.findAll(),HttpStatus.OK);
 	}
 
 }

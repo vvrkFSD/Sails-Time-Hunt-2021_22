@@ -11,7 +11,7 @@ import com.sailssoft.model.AppUser;
 
 public interface AppUserService {
 
-	public ResponseEntity<?> singnUpUser(String email);
+	public ResponseEntity<?> singnUpUser(String email,String dept_name);
 
 	public ResponseEntity<String> changePassword(String token, ResetPasswordRequest resetPassword);
 

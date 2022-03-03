@@ -67,6 +67,13 @@ public class AppUser {
 			name="project_id"
 	)
 	private Project project;
+	
+	@ManyToOne
+	@JoinColumn(
+			nullable =true,
+			name="dept_name"
+	)
+	private Department department;
 
 
 }
