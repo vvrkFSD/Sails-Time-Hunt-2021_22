@@ -33,16 +33,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
         .cors().and().csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/api/v*/**")
-                    .permitAll()
-                    .antMatchers("/api/v*/user/*")
-            		.hasAuthority("USER")
-            		.antMatchers("/api/v*/admin/*")
-            		.hasAuthority("ADMIN")
-                .anyRequest()
-                .authenticated().and()
-                .formLogin();
+        .authorizeRequests()
+        .antMatchers("/api/v*/forgot_password/**")
+        .permitAll()
+        .antMatchers("/api/v*/user/*")
+		.hasAuthority("USER")
+		.antMatchers("/api/v*/admin/*")
+		.hasAuthority("ADMIN")
+    .anyRequest()
+    .authenticated().and()
+    .formLogin();
     }
 
     @Override

@@ -42,11 +42,12 @@ public class UserTransactionController {
 		return userTransactionService.getAllUserTransactionsByDate(email,date);
 	}
 	
-	@DeleteMapping(path="timesheet/{email}/{date}")
+	/*@DeleteMapping(path="timesheet/{email}/{date}")
 	public ResponseEntity<String> deleteDayWork(@PathVariable("email") String email ,@PathVariable("date") String date){
 		
 		return userTransactionService.deleteDayWork(email,date);
 	}
+	*/
 	
 
 }

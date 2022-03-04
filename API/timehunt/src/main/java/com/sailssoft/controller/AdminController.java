@@ -34,7 +34,7 @@ public class AdminController {
 	@PostMapping(path="/admin/users")
 	public ResponseEntity<?> addUser(@RequestBody RegistrationRequest user) {
 		
-		return appUserService.singnUpUser(user.getEmail(),user.getDepartment());
+		return appUserService.singnUpUser(user.getEmail(),user.getDepartment(),user.getFirstName());
 	}
 	
 	@GetMapping(path="users")

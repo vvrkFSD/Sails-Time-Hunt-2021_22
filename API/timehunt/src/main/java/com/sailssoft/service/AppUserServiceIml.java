@@ -62,20 +62,28 @@ public class AppUserServiceIml implements UserDetailsService,AppUserService{
 
 
 	@Override
-	public ResponseEntity<?> singnUpUser(String email,String dept_name) {
+	public ResponseEntity<?> singnUpUser(String email,String dept_name,String firstName) {
 		AppUser userExists = appUserRepository.findByEmail(email);
 		if(userExists!=null&&userExists.getAppUserRole().name().equals("USER")) {
 			return new ResponseEntity<String>("email already taken",HttpStatus.SEE_OTHER);
 		}
 
 		AppUser user = new AppUser();
-		boolean isValidEmail = emailValidator.test(user.getEmail());
+		boolean isValidEmail = emailValidator.test(email);
 
 		if(!isValidEmail) {
 			return new ResponseEntity<String>("Email not valid",HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-
-		emailSender.send(email,"use P@ssword!");
+		
+		
+		
+		if(firstName!=null||firstName!="") {
+			emailSender.send(email,"Dear "+ firstName+ " please  use below credentials for default login\n username="+email+"\n password= \"P@ssword!\" \n thank you!","Timehunt login credentials");
+		}
+         
+		else {
+		emailSender.send(email,"dear sir/mam please  use this \"P@ssword!\" ","timehunt login credentials");
+		}
 
 		String encodedPassword = bCryptPasswordEncoder
 				.encode("P@ssword!");
@@ -175,7 +183,7 @@ public class AppUserServiceIml implements UserDetailsService,AppUserService{
 		confirmationTokenService.saveConfirmationToken(
 				confirmationToken);
 		String link = "http://localhost:8080/api/v1/forgot_password/reset?token="+token;
-		emailSender.send(request.getEmail(),link);
+		emailSender.send(request.getEmail(),"please reset your password using below link\n"+link,"confirm your email");
 		return new ResponseEntity<String>("Email Sent",HttpStatus.OK);
 	}
 
